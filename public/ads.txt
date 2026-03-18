@@ -1,0 +1,4 @@
+# ads.txt - Google AdSense Verification
+# Replace the placeholder values below with your actual AdSense publisher ID
+# after your site is approved by Google AdSense
+google.com, YOUR_PUBLISHER_ID, DIRECT, YOUR_AD_NETWORK_ID
