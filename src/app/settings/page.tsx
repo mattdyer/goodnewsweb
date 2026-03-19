@@ -6,12 +6,24 @@ import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { UserPreferences } from '@/types/user';
 
+type AttachmentMeta = {
+  id: string;
+  filename: string;
+  size: number;
+  mimeType: string;
+  path: string;
+  url: string;
+  owner?: string;
+  createdAt: string;
+};
+
 export default function SettingsPage() {
   const { data: session, status } = useSession();
   const router = useRouter();
   const [preferences, setPreferences] = useState<UserPreferences | null>(null);
   const [saving, setSaving] = useState(false);
   const [saved, setSaved] = useState(false);
+  const [files, setFiles] = useState<AttachmentMeta[]>([]);
 
   useEffect(() => {
     if (status === 'unauthenticated') {
@@ -20,12 +32,15 @@ export default function SettingsPage() {
   }, [status, router]);
 
   useEffect(() => {
-    if (session?.user?.id) {
-      fetch(`/api/user/preferences?userId=${session.user.id}`)
-        .then((res) => res.json())
-        .then((data) => setPreferences(data.preferences || getDefaultPreferences(session.user.id)))
-        .catch(() => setPreferences(getDefaultPreferences(session.user.id)));
-    }
+    if (!session?.user?.id) return;
+    fetch(`/api/user/preferences?userId=${session.user.id}`)
+      .then((res) => res.json())
+      .then((data) => setPreferences(data.preferences || getDefaultPreferences(session.user.id)))
+      .catch(() => setPreferences(getDefaultPreferences(session.user.id)));
+    fetch(`/api/paperclip/list?owner=${session.user.id}`)
+      .then((res) => res.json())
+      .then((data) => setFiles(data))
+      .catch(() => setFiles([]));
   }, [session]);
 
   const getDefaultPreferences = (userId: string): UserPreferences => ({
@@ -147,6 +162,49 @@ export default function SettingsPage() {
                   <option value="15">15 minutes</option>
                   <option value="30">30 minutes</option>
                 </select>
+              </div>
+            </div>
+          </div>
+
+          <div className="p-6">
+            <h2 className="text-lg font-semibold text-gray-900 mb-4">File Uploads</h2>
+            <div className="space-y-4">
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">Upload File</label>
+                <input
+                  type="file"
+                  onChange={async (e) => {
+                    const file = e.target.files?.[0];
+                    if (!file || !session?.user?.id) return;
+                    const formData = new FormData();
+                    formData.append('file', file);
+                    formData.append('owner', session.user.id);
+                    const res = await fetch('/api/paperclip/upload', {
+                      method: 'POST',
+                      body: formData,
+                    });
+                    if (res.ok) {
+                      const newFile = await res.json();
+                      setFiles((prev) => [...prev, newFile]);
+                    }
+                  }}
+                  className="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-medium file:bg-green-50 file:text-green-700 hover:file:bg-green-100"
+                />
+              </div>
+              <div>
+                <h3 className="text-sm font-medium text-gray-700 mb-2">Your Files</h3>
+                <ul className="space-y-2">
+                  {files.map((f) => (
+                    <li key={f.id} className="flex items-center justify-between bg-gray-50 p-3 rounded-lg">
+                      <div className="flex items-center gap-3">
+                        <span className="text-sm text-gray-900 truncate max-w-xs">{f.filename}</span>
+                        <span className="text-xs text-gray-500">({Math.round(f.size / 1024)}KB)</span>
+                      </div>
+                      <a href={f.url} target="_blank" rel="noopener noreferrer" className="text-sm text-green-600 hover:underline">View</a>
+                    </li>
+                  ))}
+                  {files.length === 0 && <p className="text-sm text-gray-500">No files uploaded yet.</p>}
+                </ul>
               </div>
             </div>
           </div>

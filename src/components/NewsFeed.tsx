@@ -2,7 +2,11 @@
 
 import { useEffect, useState } from 'react';
 import { NewsArticle, fetchAllFeeds } from '@/lib/rss';
-import { analyzeSentiment, filterPositiveNews } from '@/lib/sentiment';
+import { analyzeSentiment } from '@/lib/sentiment';
+import { useBookmarksContext } from '@/context/BookmarksContext';
+import ShareButton from './ShareButton';
+import BookmarkButton from './BookmarkButton';
+import CommentSection from './CommentSection';
 
 interface FilteredArticle extends NewsArticle {
   sentiment: { score: number; matchedKeywords: string[] };
@@ -13,6 +17,7 @@ export default function NewsFeed() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [lastUpdated, setLastUpdated] = useState<Date | null>(null);
+  const { bookmarks, addBookmark, removeBookmark, refetch } = useBookmarksContext();
 
   useEffect(() => {
     async function loadNews() {
@@ -53,6 +58,14 @@ export default function NewsFeed() {
     } catch {
       return dateStr;
     }
+  };
+
+  const handleBookmarkAdded = (bookmark: any) => {
+    addBookmark(bookmark.article, bookmark.sentiment);
+  };
+
+  const handleBookmarkRemoved = (bookmarkId: string) => {
+    removeBookmark(bookmarkId);
   };
 
   if (loading) {
@@ -108,11 +121,24 @@ export default function NewsFeed() {
                   <span>{formatDate(article.pubDate)}</span>
                 </div>
               </div>
-              <div className="flex flex-col items-center gap-1 text-green-600">
-                <span className="text-2xl">↑</span>
-                <span className="text-xs font-medium">+{article.sentiment.score}</span>
+              <div className="flex flex-col items-center gap-1">
+                <div className="flex items-center gap-1 text-green-600">
+                  <span className="text-2xl">↑</span>
+                  <span className="text-xs font-medium">+{article.sentiment.score}</span>
+                </div>
+                <div className="flex items-center gap-1 mt-2">
+                  <BookmarkButton
+                    article={article}
+                    sentiment={article.sentiment}
+                    bookmarks={bookmarks}
+                    onBookmarkAdded={handleBookmarkAdded}
+                    onBookmarkRemoved={handleBookmarkRemoved}
+                  />
+                  <ShareButton url={article.link} title={article.title} />
+                </div>
               </div>
             </div>
+            <CommentSection articleLink={article.link} />
           </article>
         ))}
       </div>

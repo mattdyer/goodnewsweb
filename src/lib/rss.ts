@@ -1,13 +1,7 @@
 import Parser from 'rss-parser';
+import { api, NewsArticle } from './api';
 
-export interface NewsArticle {
-  title: string;
-  link: string;
-  pubDate: string;
-  description: string;
-  source: string;
-  category?: string;
-}
+export type { NewsArticle };
 
 const parser = new Parser({
   customFields: {
@@ -25,7 +19,21 @@ const RSS_FEEDS = [
   { name: 'Al Jazeera Science', url: 'https://www.aljazeera.com/science-and-technology/rss' },
 ];
 
-export async function fetchAllFeeds(): Promise<NewsArticle[]> {
+export const RSS_SOURCES = RSS_FEEDS.map(f => f.name);
+
+async function fetchFromServer(filter?: 'positive'): Promise<NewsArticle[] | null> {
+  try {
+    const result = await api.feeds.getAll(filter);
+    if (result.data && !result.error) {
+      return result.data;
+    }
+    return null;
+  } catch {
+    return null;
+  }
+}
+
+async function fetchDirectly(filter?: 'positive'): Promise<NewsArticle[]> {
   const articles: NewsArticle[] = [];
 
   const fetchPromises = RSS_FEEDS.map(async (feed) => {
@@ -52,4 +60,14 @@ export async function fetchAllFeeds(): Promise<NewsArticle[]> {
     const dateB = new Date(b.pubDate).getTime();
     return dateB - dateA;
   });
+}
+
+export async function fetchAllFeeds(filter?: 'positive'): Promise<NewsArticle[]> {
+  const serverArticles = await fetchFromServer(filter);
+  if (serverArticles) {
+    return serverArticles;
+  }
+  
+  console.log('Server unavailable, fetching RSS directly');
+  return fetchDirectly(filter);
 }

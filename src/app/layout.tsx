@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import AuthProvider from "@/components/AuthProvider";
+import { CommentsProvider } from "@/context/CommentsContext";
+import { BookmarksProvider } from "@/context/BookmarksContext";
 import GoogleAdSense from "@/components/GoogleAdSense";
 import "./globals.css";
 
@@ -24,7 +26,11 @@ export default function RootLayout({
         )}
       </head>
       <body className={inter.className}>
-        <AuthProvider>{children}</AuthProvider>
+        <AuthProvider>
+          <BookmarksProvider>
+            <CommentsProvider>{children}</CommentsProvider>
+          </BookmarksProvider>
+        </AuthProvider>
       </body>
     </html>
   );
