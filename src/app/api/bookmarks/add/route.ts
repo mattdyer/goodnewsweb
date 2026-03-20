@@ -20,7 +20,7 @@ export async function POST(request: NextRequest) {
     const response = await fetch(`${API_URL}/api/bookmarks`, {
       method: 'POST',
       headers: {
-        'Authorization': `Bearer ${session.user.id}`,
+        'Authorization': `Bearer ${session.serverToken}`,
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({

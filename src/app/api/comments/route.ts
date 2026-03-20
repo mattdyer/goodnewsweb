@@ -13,7 +13,7 @@ export async function GET(request: NextRequest) {
     
     const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001';
     const response = await fetch(`${API_URL}/api/comments?articleId=${encodeURIComponent(articleId)}`, {
-      headers: session?.user?.id ? { 'Authorization': `Bearer ${session.user.id}` } : {},
+      headers: session?.serverToken ? { 'Authorization': `Bearer ${session.serverToken}` } : {},
     });
     
     if (!response.ok) {
@@ -21,7 +21,11 @@ export async function GET(request: NextRequest) {
     }
     
     const comments = await response.json();
-    return NextResponse.json(comments);
+    const mappedComments = comments.map((c: any) => ({
+      ...c,
+      articleLink: c.articleId,
+    }));
+    return NextResponse.json(mappedComments);
   } catch (error) {
     console.error('Error fetching comments:', error);
     return NextResponse.json({ error: 'Failed to fetch comments' }, { status: 500 });

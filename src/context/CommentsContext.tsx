@@ -2,6 +2,7 @@
 
 import { ReactNode, createContext, useContext, useState, useCallback, useEffect } from 'react';
 import { useSession } from 'next-auth/react';
+import { api, Comment as ApiComment } from '@/lib/api';
 
 export interface Comment {
   id: string;
@@ -31,9 +32,16 @@ export function CommentsProvider({ children }: { children: ReactNode }) {
   const fetchComments = useCallback(async (articleLink: string): Promise<Comment[]> => {
     try {
       setLoading(true);
-      const res = await fetch(`/api/comments?article=${encodeURIComponent(articleLink)}`);
-      if (res.ok) {
-        const comments: Comment[] = await res.json();
+      const result = await api.comments.getByArticle(articleLink);
+      if (result.data) {
+        const comments: Comment[] = result.data.map(c => ({
+          id: c.id,
+          articleLink: c.articleId,
+          userId: c.userId,
+          userName: c.userName,
+          content: c.content,
+          createdAt: c.createdAt,
+        }));
         setArticleComments(prev => {
           const next = new Map(prev);
           next.set(articleLink, comments);
@@ -53,14 +61,17 @@ export function CommentsProvider({ children }: { children: ReactNode }) {
     if (!session?.user?.id) return null;
 
     try {
-      const res = await fetch('/api/comments/add', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ articleLink, content }),
-      });
+      const result = await api.comments.add(articleLink, content);
 
-      if (res.ok) {
-        const comment: Comment = await res.json();
+      if (result.data) {
+        const comment: Comment = {
+          id: result.data.id,
+          articleLink: result.data.articleId,
+          userId: result.data.userId,
+          userName: result.data.userName,
+          content: result.data.content,
+          createdAt: result.data.createdAt,
+        };
         setArticleComments(prev => {
           const next = new Map(prev);
           const existing = next.get(articleLink) || [];
@@ -79,11 +90,9 @@ export function CommentsProvider({ children }: { children: ReactNode }) {
     if (!session?.user?.id) return false;
 
     try {
-      const res = await fetch(`/api/comments/remove?id=${commentId}`, {
-        method: 'DELETE',
-      });
+      const result = await api.comments.remove(commentId);
 
-      if (res.ok) {
+      if (!result.error) {
         setArticleComments(prev => {
           const next = new Map(prev);
           const existing = next.get(articleLink) || [];

@@ -20,7 +20,7 @@ export async function DELETE(request: NextRequest) {
     const response = await fetch(`${API_URL}/api/bookmarks/${bookmarkId}`, {
       method: 'DELETE',
       headers: {
-        'Authorization': `Bearer ${session.user.id}`,
+        'Authorization': `Bearer ${session.serverToken}`,
       },
     });
     

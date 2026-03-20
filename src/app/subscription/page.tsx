@@ -142,7 +142,7 @@ export default function SubscriptionPage() {
               </svg>
             </div>
             <h2 className="text-2xl font-bold text-gray-900 mb-2">You are a Premium Member</h2>
-            <p className="text-gray-600 mb-6">Thank you for supporting GoodNews!</p>
+            <p className="text-gray-600 mb-6">Thank you for supporting Good News Everyone!</p>
             <p className="text-gray-600 mb-6">Enjoy your ad-free experience.</p>
             <button
               onClick={handleCancel}
@@ -224,6 +224,16 @@ export default function SubscriptionPage() {
           </>
         )}
       </div>
+
+      <footer className="border-t border-gray-200 bg-white mt-12">
+        <div className="max-w-4xl mx-auto px-4 py-6">
+          <div className="flex flex-wrap justify-center gap-4 text-sm text-gray-500 mb-4">
+            <Link href="/privacy" className="hover:text-green-600">Privacy Policy</Link>
+            <Link href="/terms" className="hover:text-green-600">Terms of Service</Link>
+            <Link href="/contact" className="hover:text-green-600">Contact Us</Link>
+          </div>
+        </div>
+      </footer>
     </div>
   );
 }

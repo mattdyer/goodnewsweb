@@ -11,7 +11,7 @@ export async function POST(req: NextRequest) {
     }
     const owner = (formData.get('owner') as string) ?? ''
     const meta = await uploadFile(file, owner)
-    return NextResponse.json(meta)
+    return NextResponse.json(meta, { status: 201 })
   } catch (err) {
     return NextResponse.json({ error: String(err) }, { status: 500 })
   }

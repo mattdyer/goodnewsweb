@@ -36,7 +36,6 @@ test.describe('Paperclip API', () => {
     const response = await page.evaluate(async (url) => {
       const res = await fetch(`${url}/api/paperclip/upload`, {
         method: 'POST',
-        body: {},
       });
       
       return {

@@ -1,24 +1,16 @@
 const PAPERCLIP_URL = process.env.PAPERCLIP_URL || 'http://localhost:3001';
 
 function uploadFile(filename: string, content: string, contentType: string, owner = '') {
-  const boundary = '----WebKitFormBoundary' + Math.random().toString(36).substring(2);
-  const body = [
-    `--${boundary}`,
-    `Content-Disposition: form-data; name="file"; filename="${filename}"`,
-    `Content-Type: ${contentType}`,
-    '',
-    content,
-    `--${boundary}`,
-    owner ? `Content-Disposition: form-data; name="owner"\n\n${owner}` : '',
-    `--${boundary}--`,
-  ].join('\r\n');
+  const formData = new FormData();
+  const blob = new Blob([content], { type: contentType });
+  formData.append('file', blob, filename);
+  if (owner) {
+    formData.append('owner', owner);
+  }
 
   return fetch(`${PAPERCLIP_URL}/api/paperclip/upload`, {
     method: 'POST',
-    headers: {
-      'Content-Type': `multipart/form-data; boundary=${boundary}`,
-    },
-    body,
+    body: formData,
   });
 }
 
@@ -28,7 +20,7 @@ describe('Paperclip API', () => {
   test('POST /api/paperclip/upload - uploads a file successfully', async () => {
     const response = await uploadFile('test.txt', 'Hello, this is a test file for Paperclip!', 'text/plain', 'test-user');
     
-    expect(response.ok()).toBe(true);
+    expect(response.ok).toBe(true);
     expect(response.status).toBe(201);
     
     const data = await response.json();

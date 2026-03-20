@@ -89,6 +89,21 @@ export class Paperclip {
     if (!owner) return meta
     return meta.filter((m) => m.owner === owner)
   }
+
+  static async get(id: string): Promise<AttachmentMeta | null> {
+    const meta = await this.readMeta()
+    return meta.find((m) => m.id === id) ?? null
+  }
+
+  static async delete(id: string): Promise<boolean> {
+    const meta = await this.readMeta()
+    const idx = meta.findIndex((m) => m.id === id)
+    if (idx === -1) return false
+    const [item] = meta.splice(idx, 1)
+    await fs.promises.unlink(path.resolve(process.cwd(), 'public', item.path))
+    await fs.promises.writeFile(this.metaPath, JSON.stringify(meta, null, 2))
+    return true
+  }
 }
 
 export type { AttachmentMeta }

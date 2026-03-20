@@ -77,7 +77,7 @@ export default function AdBanner({
         <div className="flex items-center justify-between gap-4">
           <div className="flex-1">
             <p className="text-sm font-medium text-amber-800">
-              Enjoying GoodNews?
+              Enjoying Good News Everyone?
             </p>
             <p className="text-xs text-amber-600 mt-1">
               Support us and get an ad-free experience with Premium

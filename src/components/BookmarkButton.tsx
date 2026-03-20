@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import { useSession } from 'next-auth/react';
 import { Bookmark } from '@/lib/useBookmarks';
+import { api } from '@/lib/api';
 
 interface BookmarkButtonProps {
   article: {
@@ -37,20 +38,25 @@ export default function BookmarkButton({
     setLoading(true);
     try {
       if (existingBookmark) {
-        const res = await fetch(`/api/bookmarks/remove?id=${existingBookmark.id}`, {
-          method: 'DELETE',
-        });
-        if (res.ok) {
+        const result = await api.bookmarks.remove(existingBookmark.id);
+        if (!result.error) {
           onBookmarkRemoved(existingBookmark.id);
         }
       } else {
-        const res = await fetch('/api/bookmarks/add', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ article, sentiment }),
-        });
-        if (res.ok) {
-          const bookmark = await res.json();
+        const result = await api.bookmarks.add(
+          article.link,
+          article.title,
+          article.link,
+          article.source
+        );
+        if (result.data) {
+          const bookmark: Bookmark = {
+            id: result.data.id,
+            userId: session.user.id,
+            article,
+            sentiment,
+            createdAt: result.data.createdAt,
+          };
           onBookmarkAdded(bookmark);
         }
       }

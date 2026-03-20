@@ -12,7 +12,7 @@ export async function GET() {
     const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001';
     const response = await fetch(`${API_URL}/api/comments`, {
       headers: {
-        'Authorization': `Bearer ${session.user.id}`,
+        'Authorization': `Bearer ${session.serverToken}`,
       },
     });
     
@@ -21,7 +21,11 @@ export async function GET() {
     }
     
     const allComments = await response.json();
-    const userComments = allComments.filter((c: any) => c.userId === session.user.id);
+    const mappedComments = allComments.map((c: any) => ({
+      ...c,
+      articleLink: c.articleId,
+    }));
+    const userComments = mappedComments.filter((c: any) => c.userId === session.user.id);
     
     return NextResponse.json(userComments);
   } catch (error) {

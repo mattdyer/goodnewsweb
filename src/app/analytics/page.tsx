@@ -121,7 +121,7 @@ export default function AnalyticsPage() {
           <div className="flex items-center justify-between">
             <div>
               <Link href="/" className="text-2xl font-bold text-green-600 hover:text-green-700">
-                GoodNews
+                Good News Everyone
               </Link>
               <p className="text-gray-600">Analytics Dashboard</p>
             </div>

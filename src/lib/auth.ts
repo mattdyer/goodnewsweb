@@ -1,6 +1,5 @@
 import { AuthOptions, getServerSession } from 'next-auth';
 import CredentialsProvider from 'next-auth/providers/credentials';
-import { users, verifyPassword } from '@/lib/users';
 
 declare module 'next-auth' {
   interface Session {
@@ -10,6 +9,7 @@ declare module 'next-auth' {
       name?: string | null;
       isSubscribed: boolean;
     };
+    serverToken?: string;
   }
   interface User {
     id: string;
@@ -23,8 +23,11 @@ declare module 'next-auth/jwt' {
   interface JWT {
     id: string;
     isSubscribed: boolean;
+    serverToken?: string;
   }
 }
+
+const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001';
 
 export const authOptions: AuthOptions = {
   providers: [
@@ -39,22 +42,31 @@ export const authOptions: AuthOptions = {
           return null;
         }
 
-        const user = users.get(credentials.email);
-        if (!user) {
+        try {
+          const response = await fetch(`${API_URL}/api/auth/login`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              email: credentials.email,
+              password: credentials.password,
+            }),
+          });
+
+          if (!response.ok) {
+            return null;
+          }
+
+          const result = await response.json();
+          return {
+            id: result.user.id,
+            email: result.user.email,
+            name: result.user.name,
+            isSubscribed: result.user.isSubscribed,
+            serverToken: result.token,
+          };
+        } catch {
           return null;
         }
-
-        const isValid = await verifyPassword(credentials.password, user.passwordHash);
-        if (!isValid) {
-          return null;
-        }
-
-        return {
-          id: user.id,
-          email: user.email,
-          name: user.name,
-          isSubscribed: user.isSubscribed,
-        };
       },
     }),
   ],
@@ -63,6 +75,7 @@ export const authOptions: AuthOptions = {
       if (user) {
         token.id = user.id;
         token.isSubscribed = user.isSubscribed;
+        token.serverToken = (user as any).serverToken;
       }
       return token;
     },
@@ -71,6 +84,7 @@ export const authOptions: AuthOptions = {
         session.user.id = token.id;
         session.user.isSubscribed = token.isSubscribed;
       }
+      session.serverToken = token.serverToken;
       return session;
     },
   },

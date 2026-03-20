@@ -1,4 +1,4 @@
-# GoodNews Web App
+# Good News Everyone Web App
 
 A news aggregator web application built with Next.js, TypeScript, and Tailwind CSS.
 

@@ -24,7 +24,7 @@ export async function POST(request: NextRequest) {
     const response = await fetch(`${API_URL}/api/comments`, {
       method: 'POST',
       headers: {
-        'Authorization': `Bearer ${session.user.id}`,
+        'Authorization': `Bearer ${session.serverToken}`,
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({ articleId: articleLink, content }),
@@ -36,7 +36,11 @@ export async function POST(request: NextRequest) {
     }
     
     const comment = await response.json();
-    return NextResponse.json(comment, { status: 201 });
+    const mappedComment = {
+      ...comment,
+      articleLink: comment.articleId,
+    };
+    return NextResponse.json(mappedComment, { status: 201 });
   } catch (error) {
     console.error('Error adding comment:', error);
     return NextResponse.json({ error: 'Failed to add comment' }, { status: 500 });

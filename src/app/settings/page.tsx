@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { UserPreferences } from '@/types/user';
+import { PremiumBadge } from '@/components/PremiumBadge';
 
 type AttachmentMeta = {
   id: string;
@@ -109,9 +110,7 @@ export default function SettingsPage() {
                 <label className="block text-sm font-medium text-gray-700">Subscription</label>
                 <p className="mt-1">
                   {session?.user?.isSubscribed ? (
-                    <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
-                      Premium Member
-                    </span>
+                    <PremiumBadge />
                   ) : (
                     <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-gray-100 text-gray-800">
                       Free Plan

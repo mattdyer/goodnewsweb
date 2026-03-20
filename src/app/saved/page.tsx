@@ -57,7 +57,7 @@ export default function SavedPage() {
           <div className="flex items-center justify-between">
             <div>
               <Link href="/" className="text-2xl font-bold text-green-600 hover:text-green-700">
-                GoodNews
+                Good News Everyone
               </Link>
               <p className="text-gray-600">Your saved articles</p>
             </div>

@@ -4,6 +4,7 @@ import { useSession, signOut } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { useState, useEffect } from 'react';
+import { PremiumBadge } from './PremiumBadge';
 
 export default function AuthButton() {
   const { data: session, status } = useSession();
@@ -47,9 +48,9 @@ export default function AuthButton() {
               <p className="font-medium text-gray-900">{session.user?.name || 'User'}</p>
               <p className="text-sm text-gray-500">{session.user?.email}</p>
               {session.user?.isSubscribed && (
-                <span className="inline-block mt-1 text-xs bg-green-100 text-green-700 px-2 py-0.5 rounded">
-                  Premium Member
-                </span>
+                <div className="mt-1">
+                  <PremiumBadge size="sm" />
+                </div>
               )}
             </div>
             <Link
