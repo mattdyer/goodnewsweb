@@ -8,7 +8,7 @@ import { useCommentsContext } from '@/context/CommentsContext';
 import Link from 'next/link';
 
 interface ArticleWithSentiment extends NewsArticle {
-  sentiment: { score: number; matchedKeywords: string[] };
+  sentiment: { score: number; isPositive: boolean; label: string; matchedKeywords: string[] };
 }
 
 interface SourceStats {
@@ -30,7 +30,9 @@ export default function AnalyticsPage() {
         const rawArticles = await fetchAllFeeds();
         const articlesWithSentiment = rawArticles.map((article) => ({
           ...article,
-          sentiment: analyzeSentiment(`${article.title} ${article.description}`),
+          sentiment: article.sentiment 
+            ? { ...article.sentiment, matchedKeywords: [] }
+            : analyzeSentiment(`${article.title} ${article.description}`),
         }));
         setArticles(articlesWithSentiment);
       } catch (error) {
@@ -45,7 +47,7 @@ export default function AnalyticsPage() {
 
   const trendingArticles = useMemo(() => {
     return [...articles]
-      .filter((a) => a.sentiment.score > 0)
+      .filter((a) => a.sentiment.isPositive)
       .sort((a, b) => b.sentiment.score - a.sentiment.score)
       .slice(0, 5);
   }, [articles]);
@@ -249,7 +251,7 @@ export default function AnalyticsPage() {
             </div>
             <div className="text-center p-4 bg-green-50 rounded-lg">
               <p className="text-2xl font-bold text-green-600">
-                {articles.filter((a) => a.sentiment.score > 0).length}
+                {articles.filter((a) => a.sentiment.isPositive).length}
               </p>
               <p className="text-sm text-green-600">Positive Stories</p>
             </div>

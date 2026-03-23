@@ -41,6 +41,11 @@ export interface NewsArticle {
   description: string;
   source: string;
   category?: string;
+  sentiment?: {
+    score: number;
+    isPositive: boolean;
+    label: string;
+  };
 }
 
 export interface User {
@@ -169,13 +174,13 @@ export const api: ApiClient = {
       return apiRequest<Bookmark[]>('/api/bookmarks');
     },
     add: async (articleId, title, link, source) => {
-      return apiRequest<Bookmark>('/api/bookmarks', {
+      return apiRequest<Bookmark>('/api/bookmarks/add', {
         method: 'POST',
         body: JSON.stringify({ articleId, title, link, source }),
       });
     },
     remove: async (id) => {
-      return apiRequest<void>(`/api/bookmarks/${id}`, {
+      return apiRequest<void>(`/api/bookmarks/remove?id=${id}`, {
         method: 'DELETE',
       });
     },
@@ -185,16 +190,16 @@ export const api: ApiClient = {
       return apiRequest<Comment[]>(`/api/comments?articleId=${articleId}`);
     },
     getByUser: async () => {
-      return apiRequest<Comment[]>('/api/comments');
+      return apiRequest<Comment[]>('/api/comments/user');
     },
     add: async (articleId, content) => {
-      return apiRequest<Comment>('/api/comments', {
+      return apiRequest<Comment>('/api/comments/add', {
         method: 'POST',
         body: JSON.stringify({ articleId, content }),
       });
     },
     remove: async (id) => {
-      return apiRequest<void>(`/api/comments/${id}`, {
+      return apiRequest<void>(`/api/comments/remove?id=${id}`, {
         method: 'DELETE',
       });
     },

@@ -14,7 +14,7 @@ interface BookmarkButtonProps {
     source: string;
     category?: string;
   };
-  sentiment: { score: number; matchedKeywords: string[] };
+  sentiment: { score: number; isPositive: boolean; label: string; matchedKeywords: string[] };
   bookmarks: Bookmark[];
   onBookmarkAdded: (bookmark: Bookmark) => void;
   onBookmarkRemoved: (bookmarkId: string) => void;
@@ -30,7 +30,7 @@ export default function BookmarkButton({
   const { data: session } = useSession();
   const [loading, setLoading] = useState(false);
 
-  const existingBookmark = bookmarks.find(b => b.article.link === article.link);
+  const existingBookmark = bookmarks.find(b => b.article && b.article.link === article.link);
 
   const handleClick = async () => {
     if (!session?.user?.id) return;

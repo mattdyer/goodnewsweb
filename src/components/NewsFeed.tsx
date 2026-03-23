@@ -9,7 +9,7 @@ import BookmarkButton from './BookmarkButton';
 import CommentSection from './CommentSection';
 
 interface FilteredArticle extends NewsArticle {
-  sentiment: { score: number; matchedKeywords: string[] };
+  sentiment: { score: number; isPositive: boolean; label: string; matchedKeywords: string[] };
 }
 
 export default function NewsFeed() {
@@ -26,10 +26,12 @@ export default function NewsFeed() {
         const rawArticles = await fetchAllFeeds();
         const articlesWithSentiment = rawArticles.map((article) => ({
           ...article,
-          sentiment: analyzeSentiment(`${article.title} ${article.description}`),
+          sentiment: article.sentiment 
+            ? { ...article.sentiment, matchedKeywords: [] }
+            : analyzeSentiment(`${article.title} ${article.description}`),
         }));
         const positiveArticles = articlesWithSentiment
-          .filter((a) => a.sentiment.score > 0)
+          .filter((a) => a.sentiment.isPositive)
           .sort((a, b) => b.sentiment.score - a.sentiment.score);
         setArticles(positiveArticles.slice(0, 20));
         setLastUpdated(new Date());

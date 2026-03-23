@@ -83,8 +83,8 @@ export const authOptions: AuthOptions = {
       if (session.user) {
         session.user.id = token.id;
         session.user.isSubscribed = token.isSubscribed;
+        (session as any).serverToken = token.serverToken;
       }
-      session.serverToken = token.serverToken;
       return session;
     },
   },
@@ -96,7 +96,7 @@ export const authOptions: AuthOptions = {
     strategy: 'jwt',
     maxAge: 30 * 24 * 60 * 60,
   },
-  secret: process.env.NEXTAUTH_SECRET || 'development-secret-change-in-production',
+  secret: process.env.NEXTAUTH_SECRET || 'development-secret-for-local-testing-only',
 };
 
 export async function getSession() {

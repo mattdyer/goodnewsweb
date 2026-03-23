@@ -2,10 +2,13 @@ import { NextRequest, NextResponse } from 'next/server';
 import { getSession } from '@/lib/auth';
 
 export async function POST(request: NextRequest) {
+  console.log('[bookmarks/add] Starting request');
   try {
     const session = await getSession();
+    console.log('[bookmarks/add] Session:', session ? 'found' : 'null');
     
     if (!session?.user?.id) {
+      console.log('[bookmarks/add] No valid session, returning 401');
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
     

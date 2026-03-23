@@ -27,6 +27,7 @@ const NEGATIVE_KEYWORDS = [
 export interface SentimentResult {
   score: number;
   isPositive: boolean;
+  label: string;
   matchedKeywords: string[];
 }
 
@@ -55,9 +56,16 @@ export function analyzeSentiment(text: string): SentimentResult {
   
   const score = positiveMatches - negativeMatches;
   
+  let label = 'neutral';
+  if (score < -0.3) label = 'very negative';
+  else if (score < 0) label = 'negative';
+  else if (score >= 0.3) label = 'very positive';
+  else if (score > 0) label = 'positive';
+  
   return {
     score,
     isPositive: score > 0,
+    label,
     matchedKeywords: matchedPositive,
   };
 }

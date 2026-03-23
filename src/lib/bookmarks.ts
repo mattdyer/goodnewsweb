@@ -4,7 +4,7 @@ export interface Bookmark {
   id: string;
   userId: string;
   article: NewsArticle;
-  sentiment: { score: number; matchedKeywords: string[] };
+  sentiment: { score: number; isPositive: boolean; label: string; matchedKeywords: string[] };
   createdAt: string;
 }
 
@@ -14,7 +14,7 @@ export function getUserBookmarks(userId: string): Bookmark[] {
   return bookmarks.get(userId) || [];
 }
 
-export function addBookmark(userId: string, article: NewsArticle, sentiment: { score: number; matchedKeywords: string[] }): Bookmark {
+export function addBookmark(userId: string, article: NewsArticle, sentiment: { score: number; isPositive: boolean; label: string; matchedKeywords: string[] }): Bookmark {
   const userBookmarks = bookmarks.get(userId) || [];
   
   const exists = userBookmarks.some(b => b.article.link === article.link);
