@@ -123,12 +123,10 @@ export default function NewsFeed() {
                   <span>{formatDate(article.pubDate)}</span>
                 </div>
               </div>
-              <div className="flex items-center gap-2 mt-2 sm:mt-0">
-                <div className="flex items-center gap-1 text-green-600 bg-green-50 px-2 py-1 rounded">
-                  <span className="text-xl sm:text-2xl leading-none">↑</span>
-                  <div className="flex items-center">
-                    <span className="text-xs font-bold sm:text-sm">+{article.sentiment.score}</span>
-                  </div>
+              <div className="flex flex-wrap items-center gap-2 mt-2 sm:mt-0">
+                <div className="flex items-center gap-1 text-green-600 bg-green-50 px-2 py-1 rounded flex-shrink-0">
+                  <span className="text-sm sm:text-base leading-none">↑</span>
+                  <span className="text-xs font-bold sm:text-sm">+{article.sentiment.score}</span>
                 </div>
                 <div className="flex items-center gap-1">
                   <BookmarkButton
