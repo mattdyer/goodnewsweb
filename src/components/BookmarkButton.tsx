@@ -71,7 +71,7 @@ export default function BookmarkButton({
     <button
       onClick={handleClick}
       disabled={loading || !session}
-      className={`p-2 rounded-full transition-colors flex-shrink-0 ${
+      className={`p-1.5 sm:p-2 rounded-full transition-colors flex-shrink-0 ${
         isBookmarked
           ? 'text-yellow-500 hover:text-yellow-600'
           : 'text-gray-400 hover:text-yellow-500'
@@ -81,7 +81,7 @@ export default function BookmarkButton({
     >
       <svg
         xmlns="http://www.w3.org/2000/svg"
-        className={`h-5 w-5 ${isBookmarked ? 'fill-current' : ''}`}
+        className={`h-4 w-4 sm:h-5 sm:w-5 flex-shrink-0 ${isBookmarked ? 'fill-current' : ''}`}
         fill={isBookmarked ? 'currentColor' : 'none'}
         viewBox="0 0 24 24"
         stroke="currentColor"

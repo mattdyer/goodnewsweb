@@ -104,13 +104,13 @@ export default function NewsFeed() {
             className="border border-gray-200 rounded-lg p-4 sm:p-6 hover:border-green-300 hover:shadow-md transition-all bg-white"
           >
             <div className="flex flex-col sm:flex-row items-start justify-between gap-4">
-              <div className="flex-1 w-full">
+              <div className="flex-1 w-full min-w-0">
                 <h3 className="text-lg sm:text-xl font-semibold mb-2">
                   <a
                     href={article.link}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="hover:text-green-600 transition-colors"
+                    className="hover:text-green-600 transition-colors break-words"
                   >
                     {article.title}
                   </a>
@@ -118,17 +118,17 @@ export default function NewsFeed() {
                 <p className="text-gray-600 text-sm mb-4 line-clamp-3">
                   {article.description}
                 </p>
-                <div className="flex items-center gap-3 text-xs text-gray-500 mb-2 sm:mb-0">
+                <div className="flex items-center gap-3 text-xs text-gray-500 mb-2 sm:mb-0 flex-wrap">
                   <span className="font-medium text-green-600 bg-green-50 px-2 py-0.5 rounded">{article.source}</span>
-                  <span>{formatDate(article.pubDate)}</span>
+                  <span className="whitespace-nowrap">{formatDate(article.pubDate)}</span>
                 </div>
               </div>
-              <div className="flex flex-wrap items-center gap-2 mt-2 sm:mt-0">
-                <div className="flex items-center gap-1 text-green-600 bg-green-50 px-2 py-1 rounded flex-shrink-0">
+              <div className="flex items-center gap-2 mt-2 sm:mt-0 flex-shrink-0">
+                <div className="flex items-center gap-1 text-green-600 bg-green-50 px-2 py-1 rounded text-nowrap">
                   <span className="text-sm sm:text-base leading-none">↑</span>
-                  <span className="text-xs font-bold sm:text-sm">+{article.sentiment.score}</span>
+                  <span className="text-xs font-bold sm:text-sm">+{article.sentiment.score.toFixed(1)}</span>
                 </div>
-                <div className="flex items-center gap-1">
+                <div className="flex items-center gap-0.5 sm:gap-1">
                   <BookmarkButton
                     article={article}
                     sentiment={article.sentiment}

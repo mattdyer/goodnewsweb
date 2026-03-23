@@ -95,14 +95,14 @@ export default function CommentSection({ articleLink }: CommentSectionProps) {
     <div className="mt-3 pt-3">
       <button
         onClick={handleToggle}
-        className="flex items-center gap-2 text-sm text-gray-600 hover:text-green-600 transition-colors"
+        className="flex items-center gap-2 text-sm text-gray-600 hover:text-green-600 transition-colors flex-wrap"
       >
-        <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <svg className="w-4 h-4 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
         </svg>
-        <span>{comments.length} {comments.length === 1 ? 'comment' : 'comments'}</span>
+        <span className="flex-shrink-0">{comments.length} {comments.length === 1 ? 'comment' : 'comments'}</span>
         <svg
-          className={`w-4 h-4 transition-transform ${expanded ? 'rotate-180' : ''}`}
+          className={`w-4 h-4 transition-transform flex-shrink-0 ${expanded ? 'rotate-180' : ''}`}
           fill="none"
           viewBox="0 0 24 24"
           stroke="currentColor"
@@ -123,12 +123,12 @@ export default function CommentSection({ articleLink }: CommentSectionProps) {
                 rows={2}
                 className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent resize-none"
               />
-              <div className="flex justify-between items-center">
+              <div className="flex flex-wrap justify-between items-center gap-2">
                 <span className="text-xs text-gray-400">{newComment.length}/1000</span>
                 <button
                   type="submit"
                   disabled={!newComment.trim() || submitting}
-                  className="px-3 py-1.5 bg-green-600 text-white text-sm rounded-lg hover:bg-green-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+                  className="px-3 py-1.5 bg-green-600 text-white text-sm rounded-lg hover:bg-green-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors flex-shrink-0"
                 >
                   {submitting ? 'Posting...' : 'Post'}
                 </button>
