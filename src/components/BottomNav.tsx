@@ -24,7 +24,7 @@ export default function BottomNav() {
             isActive('/') ? 'text-green-600' : 'text-gray-500 hover:text-green-600'
           }`}
         >
-          <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <svg className="w-6 h-6 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path
               strokeLinecap="round"
               strokeLinejoin="round"
@@ -41,7 +41,7 @@ export default function BottomNav() {
             isActive('/saved') ? 'text-green-600' : 'text-gray-500 hover:text-green-600'
           }`}
         >
-          <svg className={`w-6 h-6 ${bookmarks.length > 0 && isActive('/saved') ? 'fill-current' : ''}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <svg className={`w-6 h-6 flex-shrink-0 ${bookmarks.length > 0 && isActive('/saved') ? 'fill-current' : ''}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path
               strokeLinecap="round"
               strokeLinejoin="round"
@@ -63,7 +63,7 @@ export default function BottomNav() {
             isActive('/settings') ? 'text-green-600' : 'text-gray-500 hover:text-green-600'
           }`}
         >
-          <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <svg className="w-6 h-6 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path
               strokeLinecap="round"
               strokeLinejoin="round"

@@ -14,6 +14,7 @@ async function apiRequest<T>(
   try {
     const response = await fetch(`${baseUrl}${endpoint}`, {
       ...options,
+      credentials: 'include',
       headers: {
         'Content-Type': 'application/json',
         ...options.headers,

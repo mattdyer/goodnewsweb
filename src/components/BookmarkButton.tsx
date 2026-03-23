@@ -71,7 +71,7 @@ export default function BookmarkButton({
     <button
       onClick={handleClick}
       disabled={loading || !session}
-      className={`p-3 rounded-full transition-colors ${
+      className={`p-3 rounded-full transition-colors flex-shrink-0 ${
         isBookmarked
           ? 'text-yellow-500 hover:text-yellow-600'
           : 'text-gray-400 hover:text-yellow-500'

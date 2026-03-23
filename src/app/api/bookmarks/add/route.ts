@@ -3,9 +3,10 @@ import { getSession } from '@/lib/auth';
 
 export async function POST(request: NextRequest) {
   console.log('[bookmarks/add] Starting request');
+  console.log('[bookmarks/add] Cookie header:', request.headers.get('cookie'));
   try {
     const session = await getSession();
-    console.log('[bookmarks/add] Session:', session ? 'found' : 'null');
+    console.log('[bookmarks/add] Session:', session ? JSON.stringify({ userId: session.user?.id, serverToken: session.serverToken ? 'present' : 'missing' }) : 'null');
     
     if (!session?.user?.id) {
       console.log('[bookmarks/add] No valid session, returning 401');

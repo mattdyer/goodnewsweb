@@ -123,12 +123,11 @@ export default function NewsFeed() {
                   <span>{formatDate(article.pubDate)}</span>
                 </div>
               </div>
-              <div className="flex flex-row sm:flex-col items-center justify-between w-full sm:w-auto border-t border-gray-50 pt-3 sm:border-0 sm:pt-0 sm:gap-1">
-                <div className="flex items-center gap-1 text-green-600 bg-green-50 sm:bg-transparent px-2 py-1 rounded sm:p-0">
-                  <span className="text-2xl sm:text-3xl leading-none">↑</span>
-                  <div className="flex flex-col sm:items-center">
+              <div className="flex items-center gap-2 mt-2 sm:mt-0">
+                <div className="flex items-center gap-1 text-green-600 bg-green-50 px-2 py-1 rounded">
+                  <span className="text-xl sm:text-2xl leading-none">↑</span>
+                  <div className="flex items-center">
                     <span className="text-xs font-bold sm:text-sm">+{article.sentiment.score}</span>
-                    <span className="text-[10px] uppercase tracking-wider hidden sm:block font-medium">Positive</span>
                   </div>
                 </div>
                 <div className="flex items-center gap-1">

@@ -32,7 +32,7 @@ export default function ShareButton({ url, title }: ShareButtonProps) {
     <div className="relative">
       <button
         onClick={() => setShowMenu(!showMenu)}
-        className="p-3 rounded-full hover:bg-gray-100 text-gray-500 hover:text-green-600 transition-colors"
+        className="p-3 rounded-full hover:bg-gray-100 text-gray-500 hover:text-green-600 transition-colors flex-shrink-0"
         aria-label="Share article"
       >
         <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
