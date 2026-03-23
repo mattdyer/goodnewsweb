@@ -45,13 +45,15 @@ export default function Home() {
   return (
     <main className="min-h-screen bg-gray-50">
       <header className="bg-white border-b border-gray-200 sticky top-0 z-10">
-        <div className="max-w-4xl mx-auto px-4 py-4 flex items-center justify-between">
-          <div>
-            <h1 className="text-3xl font-bold text-green-600">Good News Everyone</h1>
-            <p className="text-gray-600">Uplifting stories from around the world</p>
+        <div className="max-w-4xl mx-auto px-4 py-3 sm:py-4 flex items-center justify-between">
+          <div className="flex-1 min-w-0">
+            <h1 className="text-xl sm:text-3xl font-bold text-green-600 truncate">Good News Everyone</h1>
+            <p className="text-gray-600 hidden sm:block">Uplifting stories from around the world</p>
           </div>
-          <div className="flex items-center gap-4">
-            <SavedLink />
+          <div className="flex items-center gap-2 sm:gap-4">
+            <div className="hidden sm:block">
+              <SavedLink />
+            </div>
             <AuthButton />
           </div>
         </div>
@@ -71,6 +73,9 @@ export default function Home() {
           </div>
           <div className="text-center text-gray-500 text-sm">
             Good News Everyone Aggregator • Bringing you positive stories
+          </div>
+          <div className="text-center text-gray-400 text-xs mt-2">
+            v1.1.0
           </div>
         </div>
       </footer>

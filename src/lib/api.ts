@@ -1,4 +1,5 @@
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001';
+const PROXY_BASE_URL = '';
 
 interface ApiResponse<T> {
   data?: T;
@@ -7,10 +8,11 @@ interface ApiResponse<T> {
 
 async function apiRequest<T>(
   endpoint: string,
-  options: RequestInit = {}
+  options: RequestInit = {},
+  baseUrl: string = API_BASE_URL
 ): Promise<ApiResponse<T>> {
   try {
-    const response = await fetch(`${API_BASE_URL}${endpoint}`, {
+    const response = await fetch(`${baseUrl}${endpoint}`, {
       ...options,
       headers: {
         'Content-Type': 'application/json',
@@ -171,37 +173,37 @@ export const api: ApiClient = {
   },
   bookmarks: {
     getAll: async () => {
-      return apiRequest<Bookmark[]>('/api/bookmarks');
+      return apiRequest<Bookmark[]>('/api/bookmarks', {}, PROXY_BASE_URL);
     },
     add: async (articleId, title, link, source) => {
       return apiRequest<Bookmark>('/api/bookmarks/add', {
         method: 'POST',
         body: JSON.stringify({ articleId, title, link, source }),
-      });
+      }, PROXY_BASE_URL);
     },
     remove: async (id) => {
       return apiRequest<void>(`/api/bookmarks/remove?id=${id}`, {
         method: 'DELETE',
-      });
+      }, PROXY_BASE_URL);
     },
   },
   comments: {
     getByArticle: async (articleId) => {
-      return apiRequest<Comment[]>(`/api/comments?articleId=${articleId}`);
+      return apiRequest<Comment[]>(`/api/comments?articleId=${articleId}`, {}, PROXY_BASE_URL);
     },
     getByUser: async () => {
-      return apiRequest<Comment[]>('/api/comments/user');
+      return apiRequest<Comment[]>('/api/comments/user', {}, PROXY_BASE_URL);
     },
     add: async (articleId, content) => {
       return apiRequest<Comment>('/api/comments/add', {
         method: 'POST',
         body: JSON.stringify({ articleId, content }),
-      });
+      }, PROXY_BASE_URL);
     },
     remove: async (id) => {
       return apiRequest<void>(`/api/comments/remove?id=${id}`, {
         method: 'DELETE',
-      });
+      }, PROXY_BASE_URL);
     },
   },
   paperclip: {

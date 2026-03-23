@@ -13,9 +13,23 @@ export async function POST(request: NextRequest) {
     }
     
     const body = await request.json();
-    const { article, sentiment } = body;
+    // Support both formats: flat fields or nested article object
+    let articleId, title, link, source;
+    if (body.article && body.article.link) {
+      // Nested format (legacy)
+      articleId = body.article.link;
+      title = body.article.title;
+      link = body.article.link;
+      source = body.article.source;
+    } else {
+      // Flat format from client
+      articleId = body.articleId;
+      title = body.title;
+      link = body.link;
+      source = body.source;
+    }
     
-    if (!article || !article.link) {
+    if (!articleId || !title || !link) {
       return NextResponse.json({ error: 'Invalid article data' }, { status: 400 });
     }
     
@@ -27,10 +41,10 @@ export async function POST(request: NextRequest) {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        articleId: article.link,
-        title: article.title,
-        link: article.link,
-        source: article.source,
+        articleId,
+        title,
+        link,
+        source: source || '',
       }),
     });
     

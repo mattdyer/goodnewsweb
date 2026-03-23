@@ -8,6 +8,7 @@ import GoogleAdSense from "@/components/GoogleAdSense";
 import GoogleTagManager, { GoogleTagManagerNoScript } from "@/components/GoogleTagManager";
 import GoogleAnalytics, { TrackPageViews } from "@/components/GoogleAnalytics";
 import ConsentBanner from "@/components/ConsentBanner";
+import BottomNav from "@/components/BottomNav";
 import "./globals.css";
 
 const inter = Inter({ subsets: ["latin"] });
@@ -35,7 +36,7 @@ export default function RootLayout({
           <GoogleAdSense adClient={process.env.NEXT_PUBLIC_GOOGLE_ADSENSE_CLIENT_ID} />
         )}
       </head>
-      <body className={inter.className}>
+      <body className={`${inter.className} pb-16 sm:pb-0`}>
         {process.env.NEXT_PUBLIC_GTM_ID && (
           <GoogleTagManagerNoScript gtmId={process.env.NEXT_PUBLIC_GTM_ID} />
         )}
@@ -46,6 +47,7 @@ export default function RootLayout({
                 <TrackPageViews />
               </Suspense>
               {children}
+              <BottomNav />
               <ConsentBanner />
             </CommentsProvider>
           </BookmarksProvider>

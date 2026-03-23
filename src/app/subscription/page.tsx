@@ -232,6 +232,9 @@ export default function SubscriptionPage() {
             <Link href="/terms" className="hover:text-green-600">Terms of Service</Link>
             <Link href="/contact" className="hover:text-green-600">Contact Us</Link>
           </div>
+          <div className="text-center text-gray-400 text-xs mt-2">
+            v1.1.0
+          </div>
         </div>
       </footer>
     </div>

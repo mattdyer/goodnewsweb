@@ -10,9 +10,11 @@ export async function POST(request: NextRequest) {
     }
     
     const body = await request.json();
-    const { articleLink, content } = body;
+    // Support both articleId and articleLink (backward compatibility)
+    const articleId = body.articleId || body.articleLink;
+    const { content } = body;
     
-    if (!articleLink || !content) {
+    if (!articleId || !content) {
       return NextResponse.json({ error: 'Missing required fields' }, { status: 400 });
     }
     
@@ -27,7 +29,7 @@ export async function POST(request: NextRequest) {
         'Authorization': `Bearer ${session.serverToken}`,
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify({ articleId: articleLink, content }),
+      body: JSON.stringify({ articleId, content }),
     });
     
     if (!response.ok) {
@@ -36,11 +38,8 @@ export async function POST(request: NextRequest) {
     }
     
     const comment = await response.json();
-    const mappedComment = {
-      ...comment,
-      articleLink: comment.articleId,
-    };
-    return NextResponse.json(mappedComment, { status: 201 });
+    // Keep articleId as is (no mapping needed)
+    return NextResponse.json(comment, { status: 201 });
   } catch (error) {
     console.error('Error adding comment:', error);
     return NextResponse.json({ error: 'Failed to add comment' }, { status: 500 });

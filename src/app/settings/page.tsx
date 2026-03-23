@@ -82,20 +82,20 @@ export default function SettingsPage() {
 
   return (
     <div className="min-h-screen bg-gray-50">
-      <header className="bg-white border-b border-gray-200">
-        <div className="max-w-4xl mx-auto px-4 py-4 flex items-center gap-4">
-          <Link href="/" className="text-gray-500 hover:text-gray-700">
+      <header className="bg-white border-b border-gray-200 sticky top-0 z-10">
+        <div className="max-w-4xl mx-auto px-4 py-3 sm:py-4 flex items-center gap-4">
+          <Link href="/" className="text-gray-500 hover:text-gray-700 p-2 -ml-2">
             <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
             </svg>
           </Link>
-          <h1 className="text-2xl font-bold text-gray-900">Settings</h1>
+          <h1 className="text-xl sm:text-2xl font-bold text-gray-900">Settings</h1>
         </div>
       </header>
 
       <div className="max-w-4xl mx-auto px-4 py-8">
         <div className="bg-white rounded-lg shadow-md divide-y divide-gray-200">
-          <div className="p-6">
+          <div className="p-4 sm:p-6">
             <h2 className="text-lg font-semibold text-gray-900 mb-4">Account</h2>
             <div className="space-y-4">
               <div>
@@ -121,7 +121,7 @@ export default function SettingsPage() {
             </div>
           </div>
 
-          <div className="p-6">
+          <div className="p-4 sm:p-6">
             <h2 className="text-lg font-semibold text-gray-900 mb-4">Preferences</h2>
             <div className="space-y-6">
               <div>
@@ -165,7 +165,7 @@ export default function SettingsPage() {
             </div>
           </div>
 
-          <div className="p-6">
+          <div className="p-4 sm:p-6">
             <h2 className="text-lg font-semibold text-gray-900 mb-4">File Uploads</h2>
             <div className="space-y-4">
               <div>
@@ -208,7 +208,7 @@ export default function SettingsPage() {
             </div>
           </div>
 
-          <div className="p-6 flex items-center gap-4">
+          <div className="p-4 sm:p-6 flex items-center gap-4">
             <button
               onClick={handleSave}
               disabled={saving}
